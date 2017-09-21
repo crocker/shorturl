@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Highrise - Tech Test</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="alert alert-success d-none" role="alert">
+            <span id="short-url"></span>
+            <a href="" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+        </div>
+        <form action="http://mni.cloud" method="POST">
+            <div class="form-group">
+                <label for="url">Please enter a URL:</label>
+                <input id="url" name="url" class="form-control form-control-lg" type="text" placeholder="https://www.highrisegame.com">
+            </div>
+            <button type="submit" class="btn btn-primary">Shrink</button>
+        </form>
+    </div>
+
+
+    <!-- javascript -->
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            var frm = $('form');
+
+            // click on button submit
+            frm.on('submit', function(e){
+                e.preventDefault();
+
+                // send ajax
+                $.ajax({
+                    url: frm.attr('action'),
+                    type : frm.attr('method'),
+                    data : frm.serialize(),
+                    success : function(result) {
+                        console.log(result);
+                        if(result.errors && result.errors.length) {
+                            // TODO: display error messages
+                        }
+                        else {
+                            $('.alert a').attr('href', result.data.url);
+                            $('#short-url').text(result.data.url);
+                            $('.alert').removeClass('d-none');
+                        }
+                    },
+                    error: function(xhr, resp, text) {
+                        console.log(xhr, resp, text);
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
